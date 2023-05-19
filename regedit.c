@@ -1,5 +1,5 @@
-# The TOKEN
-# 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
+// The TOKEN
+// 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
 
 #include <fcntl.h>
 #include <unistd.h>
