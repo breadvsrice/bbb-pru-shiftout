@@ -21,7 +21,7 @@ int main() {
     // Map physical memory address to virtual memory
     // 0x4A300000 = PRU_ICSS Base Addr
     // 0x44E00400 = CFG_WKUP Base Addr
-    reg = (volatile unsigned int *)mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0x4A300000);
+    reg = (volatile unsigned int *)mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0x44E00400);
     if (reg == MAP_FAILED) {
         printf("Error mapping memory.\n");
         close(fd);
