@@ -1,26 +1,44 @@
 // The TOKEN
 // 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
 
+#include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <sys/mman.h>
 
 int main() {
+    int fd;
+    volatile unsigned int *reg;
 
-        printf("Preparing to open /dev/mem with R/W permissions...\n");
+    printf("Preparing to open /dev/mem with R/W permissions...\n");
 
-        int fd = open("/dev/mem", O_RDWR);
+    fd = open("/dev/mem", O_RDWR);
     if (fd == -1) {
-        // Handle error opening /dev/mem
-                printf("Handle Error...\n");
+        printf("Error opening /dev/mem.\n");
         return -1;
     }
 
-    // Perform operations on /dev/mem using the file descriptor
-        printf("Closing /dev/mem instance...\n");
+    // Map physical memory address to virtual memory
+    reg = (volatile unsigned int *)mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0x4A326000);
+    if (reg == MAP_FAILED) {
+        printf("Error mapping memory.\n");
+        close(fd);
+        return -1;
+    }
+
+    // Read the value from the register
+    unsigned int value = *reg;
+
+    // Perform operations on the value
+    printf("RegVal: 0x%x\n", value);
+        
+    // Unmap the memory
+    munmap(reg, sizeof(unsigned int));
+
+    printf("Closing /dev/mem instance...\n");
     close(fd);
 
-        printf("Program Complete!\n");
+    printf("Program Complete!\n");
 
     return 0;
 }
