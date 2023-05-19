@@ -22,7 +22,7 @@ int main() {
     printf("Page size: %d\n", page_size);
 
     // Address to be mapped (change it accordingly)
-    unsigned int address = 0x44E00400;
+    unsigned int address = 0x44E00454;
 
     // Align the address to the page size
     unsigned int aligned_address = address & ~(page_size - 1);
