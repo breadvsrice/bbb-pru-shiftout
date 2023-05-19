@@ -31,9 +31,9 @@ int main() {
 
     // Perform operations on the value
     printf("RegVal: 0x%x\n", value);
-        
+
     // Unmap the memory
-    munmap(reg, sizeof(unsigned int));
+    munmap((void *)reg, sizeof(unsigned int));
 
     printf("Closing /dev/mem instance...\n");
     close(fd);
