@@ -44,6 +44,13 @@ int main() {
     // Perform operations on the value
     printf("RegVal: 0x%x\n", value);
 
+    // Set bit 3 in the value
+    unsigned int bitmask = 1 << 23;
+    value |= bitmask;
+
+    // Write the modified value back to the register
+    reg[offset / sizeof(unsigned int)] = value;
+
     // Unmap the memory
     if (munmap((void *)reg, sizeof(unsigned int)) == -1) {
         printf("Error unmapping memory: %s\n", strerror(errno));
