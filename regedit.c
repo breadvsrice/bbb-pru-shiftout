@@ -19,7 +19,7 @@ int main() {
     }
 
     // Map physical memory address to virtual memory
-    reg = (volatile unsigned int *)mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0x44E00454);
+    reg = (volatile unsigned int *)mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0x44E00400);
     if (reg == MAP_FAILED) {
         printf("Error mapping memory.\n");
         close(fd);
@@ -33,11 +33,11 @@ int main() {
     printf("RegVal: 0x%x\n", value);
     
     // Set bit 3 in the value
-    unsigned int bitmask = 1 << 23;
-    value |= bitmask;
+    //unsigned int bitmask = 1 << 23;
+    //value |= bitmask;
 
     // Write the modified value back to the register
-    *reg = value;
+    //*reg = value;
 
     // Unmap the memory
     munmap((void *)reg, sizeof(unsigned int));
