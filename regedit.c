@@ -1,6 +1,3 @@
-// The TOKEN
-// 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
-
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -20,8 +17,21 @@ int main() {
         return -1;
     }
 
+    // Get the page size for the system
+    int page_size = getpagesize();
+    printf("Page size: %d\n", page_size);
+
+    // Address to be mapped (change it accordingly)
+    unsigned int address = 0x44E00400;
+
+    // Align the address to the page size
+    unsigned int aligned_address = address & ~(page_size - 1);
+
+    // Calculate the offset from the aligned address
+    unsigned int offset = address - aligned_address;
+
     // Map physical memory address to virtual memory
-    reg = (volatile unsigned int *)mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0x44E00400);
+    reg = (volatile unsigned int *)mmap(NULL, sizeof(unsigned int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, aligned_address);
     if (reg == MAP_FAILED) {
         printf("Error mapping memory: %s\n", strerror(errno));
         close(fd);
@@ -29,17 +39,10 @@ int main() {
     }
 
     // Read the value from the register
-    unsigned int value = *reg;
+    unsigned int value = reg[offset / sizeof(unsigned int)];
 
     // Perform operations on the value
     printf("RegVal: 0x%x\n", value);
-
-    // Set bit 3 in the value
-    // unsigned int bitmask = 1 << 3;
-    // value |= bitmask;
-
-    // Write the modified value back to the register
-    // *reg = value;
 
     // Unmap the memory
     if (munmap((void *)reg, sizeof(unsigned int)) == -1) {
